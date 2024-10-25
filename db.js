@@ -1,13 +1,14 @@
 import { Sequelize } from "sequelize";
-
+import { config } from "dotenv";
+config()
 const sequelize = new Sequelize(
-	'telega_bot',
-	'postgres',
-	'456ghj000',
-	 {
-		host: 'localhost',
-		port: 5432,
-		dialect: 'postgres'
-	 }
-)
-export default sequelize
+  "Telegramm-Bot",
+  process.env.PG_USERNAME,
+  process.env.PG_PASSWORD,
+  {
+    host: process.env.PG_LOCALHOST,
+    port: 5432,
+    dialect: "postgres",
+  }
+);
+export default sequelize;

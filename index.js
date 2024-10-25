@@ -1,54 +1,61 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { hydrate } from "@grammyjs/hydrate";
 import sequelize from "./db.js";
+import { InlineQueryStateText, language } from "./models.js";
+import { Op, Sequelize, where } from "sequelize";
+import { config } from "dotenv";
+import { menuKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+import { submenuKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+import { frontendLangKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+import { jsframeworkKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+config();
 async function start() {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-    console.log("подкулючение к бд успешно");
-  } catch (err) {
-    console.log(err, "ошибка к подключении бд");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
   }
 }
-start()
-const bot = new Bot("8126076028:AAHISprsKeh2Hj-kq-WMFTr0JHfYdDP7QYk");
-const startText =
-  "Привет, Это бот по Языкам программирования, здесь ты сможешь точно определиться с своим направлением и выбрать для себя подходящий язык, а также ты сможешь узнать,какие языки програмирования используют в тех или иных сферах. Также тебе нужно подписаться на мой телеграмм канал - @Gigachedcool.";
-const subText =
-  "Для начала определимся,какие на данный момент есть востребованные направления. Frontend-разработчик (frontend developer) — это специалист, который отвечает за создание пользовательского интерфейса сайта, приложения или ПО.Бэкенд-разработчик — это программист, который работает над внутренней частью веб-ресурсов. Он пишет код, разрабатывает бизнес-логику веб-приложений, задает им алгоритм работы и обеспечивает корректное выполнение пользовательских запросов.";
-const menuKeyBoard = new InlineKeyboard().text(
-  "Выбрать направление",
-  "direction"
-);
-const submenuKeyBoard = new InlineKeyboard()
-  .text("Frontend", "front")
-  .text("Backend", "back");
-const frontendLangKeyBoard = new InlineKeyboard()
-  .text("JavaScript", "js")
-  .text("HTML", "html")
-  .text("CSS", "css")
-  .row()
-  .text("Главное меню", "back");
-const jsframeworkKeyBoard = new InlineKeyboard()
-  .text("React.js")
-  .text("Vue.js")
-  .text("Angular.js")
-  .text("Next.js")
-  .row()
-  .text("< Назад", "backToFrontend");
+start();
+const bot = new Bot(process.env.BOT_TOKEN);
+async function findTextUsingKeywords(ctx) {
+  let res = await language.findOne({
+    where: {
+      keywords: {
+        [Op.contains]: keywords,
+      },
+    },
+  });
+  let startText = res.textLink.toString("utf-8");
+}
+async function fetchInlineText(id) {
+  let res = await InlineQueryStateText.findOne({
+    where: {
+      id: id,
+    },
+  });
+  return res.inlineTextStatic.toString("utf-8");
+}
 bot.use(hydrate());
 bot.api.setMyCommands([
   { command: "start", description: "Запустить бота" },
   { command: "help", description: "Поддержка" },
 ]);
 bot.command("start", async (ctx) => {
-  await ctx.reply(startText, {
-    reply_markup: menuKeyBoard,
-  });
+  try {
+    const startText = await fetchInlineText(2);
+    await ctx.reply(startText, {
+      reply_markup: menuKeyBoard,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 bot.callbackQuery("direction", async (ctx) => {
   try {
-    await ctx.callbackQuery.message.editText(subText, {
+    const directionText = await fetchInlineText(3);
+    await ctx.callbackQuery.message.editText(directionText, {
       reply_markup: submenuKeyBoard,
     });
     await ctx.answerCallbackQuery();
@@ -58,12 +65,10 @@ bot.callbackQuery("direction", async (ctx) => {
 });
 bot.callbackQuery("front", async (ctx) => {
   try {
-    await ctx.callbackQuery.message.editText(
-      "Итак, базовый набор инструментов для разработки фронтенда четко определен: HTML, CSS и JavaScript. Однако этот набор может быть значительно расширен, включив в себя диспетчеры пакетов, CSS-препроцессоры, фреймворки и многое другое.",
-      {
-        reply_markup: frontendLangKeyBoard,
-      }
-    );
+    const frontText = await fetchInlineText(5);
+    await ctx.callbackQuery.message.editText(frontText, {
+      reply_markup: frontendLangKeyBoard,
+    });
     await ctx.answerCallbackQuery();
   } catch (err) {
     console.log(err, "front error");
@@ -71,7 +76,8 @@ bot.callbackQuery("front", async (ctx) => {
 });
 bot.callbackQuery("back", async (ctx) => {
   try {
-    await ctx.callbackQuery.message.editText(startText, {
+    const back = await fetchInlineText(2);
+    await ctx.callbackQuery.message.editText(back, {
       reply_markup: submenuKeyBoard,
     });
     await ctx.answerCallbackQuery();
@@ -81,28 +87,60 @@ bot.callbackQuery("back", async (ctx) => {
 });
 bot.callbackQuery("js", async (ctx) => {
   try {
-    await ctx.callbackQuery.message.editText(
-      "JavaScript — это язык скриптов, на котором держится весь frontend веб-разработки. Он позволяет перехватывать события и выполнять различные действия. Например, пользователь кликнул по какой-нибудь кнопке — сработало событие click. И, связав с ним, мы можем выполнить нужную нам функцию — открыть модальное окно или изменить цвет элемента. JavaScript используется для того, чтобы делать страницы интерактивными, то есть дать пользователю возможность взаимодействовать с элементами. Когда страницы могут реагировать на какие-то действия, это делает их интереснее. Если, конечно, не намешано много безвкусицы.",
-      {
-        reply_markup: jsframeworkKeyBoard,
-      }
-    );
+    const jsText = await fetchInlineText(7);
+    await ctx.callbackQuery.message.editText(jsText, {
+      reply_markup: jsframeworkKeyBoard,
+    });
   } catch (err) {
     console.log(err, "js error");
   }
 });
+
 bot.callbackQuery("html", async (ctx) => {
   try {
-    await ctx.callbackQuery.message.editText(
-      `HTML (от англ. HyperText Markup Language — «язык гипертекстовой разметки») — стандартизированный язык гипертекстовой разметки документов для просмотра веб-страниц в браузере. Веб-браузеры получают HTML документ от сервера по протоколам HTTP/HTTPS или открывают с локального диска, далее интерпретируют код в интерфейс, который будет отображаться на экране монитора.`,
-      {
-        reply_markup: frontendLangKeyBoard,
-      }
-    );
+    const htmlText = await fetchInlineText(8);
+    await ctx.callbackQuery.message.editText(htmlText, {
+      reply_markup: frontendLangKeyBoard,
+    });
     await ctx.answerCallbackQuery();
   } catch (err) {
     console.log(err, "html err");
   }
 });
+bot.on("msg", async (ctx) => {
+  try {
+    let keywords = ctx.message.text
+      .split(" , ")
+      .map((keyword) => keyword.trim());
+    console.log("Ключевые слова:", keywords);
 
+    let conditions = {
+      keywords: {
+        [Op.iLike]: `%${keywords}%`,
+      },
+    };
+    console.log(conditions);
+
+    let res = await language.findAll({
+      where: {
+        [Op.or]: conditions,
+      },
+      order: [
+        [
+          sequelize.fn("similarity", sequelize.col("keywords"), keywords[0]),
+          "DESC",
+        ],
+      ],
+    });
+    if (res.length > 0) {
+      let tex = res[0].textLink.toString("utf-8");
+      await ctx.reply(tex);
+    } else {
+      await ctx.reply(`возможно вы имели другие языки программирования`);
+    }
+  } catch (error) {
+    console.error("Ошибка при выполнении запроса:", error);
+    await ctx.reply("Произошла ошибка при выполнении запроса.");
+  }
+});
 bot.start();
