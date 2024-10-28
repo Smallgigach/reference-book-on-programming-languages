@@ -9,11 +9,3 @@ export const InlineQueryStateText = sequelize.define("inline", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   inlineTextStatic: { type: DataTypes.BLOB, allowNull: true },
 });
-const startText = "JAVA — кууул";
-function createTexts() {
-  const createText = language.create({
-    textLink: startText,
-    keywords: "java, Java",
-  });
-}
-// createTexts();
