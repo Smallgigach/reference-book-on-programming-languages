@@ -1,4 +1,4 @@
-import { Bot} from "grammy";
+import Bot from '@grammyjs';
 import { hydrate } from "@grammyjs/hydrate";
 import sequelize from "./db.js";
 import { InlineQueryStateText, language } from "./models.js";
