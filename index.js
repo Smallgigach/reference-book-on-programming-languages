@@ -1,7 +1,7 @@
-import {Bot} from "grammy";
+import {Bot} from 'grammy';
 import { hydrate } from "@grammyjs/hydrate";
 import sequelize from "./db.js";
-import { InlineQueryStateText, language } from "./models";
+import { InlineQueryStateText, language } from "./models.js";
 import { Op } from "sequelize";
 import { config } from "dotenv";
 import {
@@ -9,9 +9,9 @@ import {
     menuKeyBoard,
     nodeJsFrames,
 } from "./InlineKeyBoard/InlineKeyBoards.js";
-import { submenuKeyBoard } from "./InlineKeyBoard/InlineKeyBoards";
-import { frontendLangKeyBoard } from "./InlineKeyBoard/InlineKeyBoards";
-import { jsframeworkKeyBoard } from "./InlineKeyBoard/InlineKeyBoards";
+import { submenuKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+import { frontendLangKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+import { jsframeworkKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
 config();
 async function start() {
     try {
@@ -23,6 +23,7 @@ async function start() {
 }
 start().then(() => console.log('бот запущен'));
 const bot = new Bot(process.env.BOT_TOKEN);
+console.log(bot)
 async function fetchInlineText(id) {
     let res = await InlineQueryStateText.findOne({
         where: {

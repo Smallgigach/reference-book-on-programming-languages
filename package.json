@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "main": "node index.js",
   "dependencies": {
     "@grammyjs/hydrate": "^1.4.1",
