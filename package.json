@@ -1,6 +1,5 @@
 {
   "type": "module",
-  "main": "nodemon index.js",
   "dependencies": {
     "@grammyjs/hydrate": "^1.4.1",
     "axios": "^1.7.7",
@@ -21,7 +20,8 @@
     "coffee-script": "^1.6.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
