@@ -1,7 +1,7 @@
 import {Bot} from "grammy";
 import { hydrate } from "@grammyjs/hydrate";
 import sequelize from "./db.js";
-import { InlineQueryStateText, language } from "./models.js";
+import { InlineQueryStateText, language } from "./models";
 import { Op } from "sequelize";
 import { config } from "dotenv";
 import {
@@ -9,9 +9,9 @@ import {
     menuKeyBoard,
     nodeJsFrames,
 } from "./InlineKeyBoard/InlineKeyBoards.js";
-import { submenuKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
-import { frontendLangKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
-import { jsframeworkKeyBoard } from "./InlineKeyBoard/InlineKeyBoards.js";
+import { submenuKeyBoard } from "./InlineKeyBoard/InlineKeyBoards";
+import { frontendLangKeyBoard } from "./InlineKeyBoard/InlineKeyBoards";
+import { jsframeworkKeyBoard } from "./InlineKeyBoard/InlineKeyBoards";
 config();
 async function start() {
     try {

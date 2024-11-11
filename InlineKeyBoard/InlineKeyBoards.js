@@ -1,4 +1,4 @@
-import { InlineKeyboard } from "grammy";
+import { InlineKeyboard } from 'grammy';
 export const menuKeyBoard = new InlineKeyboard().text(
   "Выбрать направление",
   "direction"
