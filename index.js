@@ -1,4 +1,4 @@
-import Bot from 'grammy';
+import {Bot} from "grammy";
 import { hydrate } from "@grammyjs/hydrate";
 import sequelize from "./db.js";
 import { InlineQueryStateText, language } from "./models.js";
@@ -21,7 +21,7 @@ async function start() {
         console.error("Unable to connect to the database:", error);
     }
 }
-start().then(r => console.log('бот запущен'));
+start().then(() => console.log('бот запущен'));
 const bot = new Bot(process.env.BOT_TOKEN);
 async function fetchInlineText(id) {
     let res = await InlineQueryStateText.findOne({
