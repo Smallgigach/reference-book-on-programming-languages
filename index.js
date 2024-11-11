@@ -22,7 +22,7 @@ async function start() {
     }
 }
 start().then(() => console.log('бот запущен'));
-const bot = new Bot(process.env.BOT_TOKEN);
+const bot = new Bot('8126076028:AAHISprsKeh2Hj-kq-WMFTr0JHfYdDP7QYk');
 console.log(bot)
 async function fetchInlineText(id) {
     let res = await InlineQueryStateText.findOne({
