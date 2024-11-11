@@ -1,8 +1,8 @@
-import { Bot, InlineKeyboard } from "grammy";
+import { Bot} from "grammy";
 import { hydrate } from "@grammyjs/hydrate";
 import sequelize from "./db.js";
 import { InlineQueryStateText, language } from "./models.js";
-import { Op, Sequelize, where } from "sequelize";
+import { Op } from "sequelize";
 import { config } from "dotenv";
 import {
     backendLangKeyBoard,

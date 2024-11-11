@@ -4,7 +4,7 @@
     "@grammyjs/hydrate": "^1.4.1",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
-    "grammy": "^1.30.0",
+    "grammy": "^1.31.1",
     "hydrate": "^1.0.0",
     "jsdom": "^25.0.1",
     "latest": "^0.2.0",
