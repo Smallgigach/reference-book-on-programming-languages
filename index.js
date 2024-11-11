@@ -21,7 +21,7 @@ async function start() {
         console.error("Unable to connect to the database:", error);
     }
 }
-start()
+start().then(r => console.log('бот запущен'));
 const bot = new Bot(process.env.BOT_TOKEN);
 async function fetchInlineText(id) {
     let res = await InlineQueryStateText.findOne({
